@@ -13,6 +13,9 @@ namespace PocSecurity.Filter
     public class SensitiveResultFilter : IResultFilter
     {
         private readonly ICipherService _cipherService;
+
+        private const string SECRET = "aee6f218d6ab4cd595846fa172b360a0";
+        
         public SensitiveResultFilter(ICipherService cipherService)
         {
             _cipherService = cipherService;
@@ -30,7 +33,7 @@ namespace PocSecurity.Filter
 
             var resultValue = okResult.Value;
 
-            SensitiveFilterHelper.EncryptProperties(resultValue, _cipherService);
+            SensitiveFilterHelper.EncryptProperties(resultValue, _cipherService, SECRET);
         }
     }
 }

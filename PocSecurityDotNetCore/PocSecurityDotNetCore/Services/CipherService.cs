@@ -13,7 +13,7 @@ namespace PocSecurity.Services
             _dataProtectionProvider = dataProtectionProvider;
         }
 
-        public string Encrypt(string input)
+        public string Encrypt(string input, string secret = "")
         {
             var protector = _dataProtectionProvider.CreateProtector(Key);
             try
@@ -26,7 +26,7 @@ namespace PocSecurity.Services
             }
         }
 
-        public string Decrypt(string cipherText)
+        public string Decrypt(string cipherText, string secret = "")
         {
             var protector = _dataProtectionProvider.CreateProtector(Key);
 

@@ -2,7 +2,7 @@
 {
     public interface ICipherService
     {
-        string Encrypt(string input);
-        string Decrypt(string cipherText);
+        string Encrypt(string input, string secret = "");
+        string Decrypt(string cipherText, string secret = "");
     }
 }

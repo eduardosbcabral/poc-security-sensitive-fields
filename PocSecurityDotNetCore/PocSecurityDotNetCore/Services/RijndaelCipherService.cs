@@ -1,57 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PocSecurity.Services
 {
     public class RijndaelCipherService : ICipherService
     {
-        private const string Secret = "mylongtextsecret";
-
-        public string Decrypt(string cipherText)
+        public RijndaelCipherService()
         {
-            cipherText = cipherText.Replace(" ", "+");
-            byte[] cipherBytes = Convert.FromBase64String(cipherText);
-            using (Aes encryptor = Aes.Create())
+
+        }
+
+        public string Encrypt(string cipherText, string secret)
+        {
+            var salt = Encoding.ASCII.GetBytes(secret.Length.ToString());
+
+            RijndaelManaged rijndaelCipher = new RijndaelManaged();
+            byte[] plainText = Encoding.Unicode.GetBytes(cipherText);
+            PasswordDeriveBytes SecretKey = new PasswordDeriveBytes(secret, salt);
+
+            using (ICryptoTransform encryptor = rijndaelCipher.CreateEncryptor(SecretKey.GetBytes(32), SecretKey.GetBytes(16)))
             {
-                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(Secret, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-                encryptor.Key = pdb.GetBytes(32);
-                encryptor.IV = pdb.GetBytes(16);
-                using (MemoryStream ms = new MemoryStream())
+                using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
                     {
-                        cs.Write(cipherBytes, 0, cipherBytes.Length);
-                        cs.Close();
+                        cryptoStream.Write(plainText, 0, plainText.Length);
+                        cryptoStream.FlushFinalBlock();
+                        cipherText = Convert.ToBase64String(memoryStream.ToArray());
                     }
-                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
                 }
             }
+
             return cipherText;
         }
 
-        public string Encrypt(string input)
+        public string Decrypt(string input, string secret)
         {
-            byte[] clearBytes = Encoding.Unicode.GetBytes(input);
-            using (Aes encryptor = Aes.Create())
+            var salt = Encoding.ASCII.GetBytes(secret.Length.ToString());
+
+            RijndaelManaged rijndaelCipher = new RijndaelManaged();
+            byte[] encryptedData = Convert.FromBase64String(input);
+            PasswordDeriveBytes secretKey = new PasswordDeriveBytes(secret, salt);
+
+            using (ICryptoTransform decryptor = rijndaelCipher.CreateDecryptor(secretKey.GetBytes(32), secretKey.GetBytes(16)))
             {
-                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(Secret, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-                encryptor.Key = pdb.GetBytes(32);
-                encryptor.IV = pdb.GetBytes(16);
-                using (MemoryStream ms = new MemoryStream())
+                using (MemoryStream memoryStream = new MemoryStream(encryptedData))
                 {
-                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    using (CryptoStream cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
                     {
-                        cs.Write(clearBytes, 0, clearBytes.Length);
-                        cs.Close();
+                        byte[] plainText = new byte[encryptedData.Length];
+                        int decryptedCount = cryptoStream.Read(plainText, 0, plainText.Length);
+                        input = Encoding.Unicode.GetString(plainText, 0, decryptedCount);
                     }
-                    input = Convert.ToBase64String(ms.ToArray());
                 }
             }
+
             return input;
         }
     }

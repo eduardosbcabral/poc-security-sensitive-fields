@@ -32,7 +32,7 @@ namespace PocSecurity.Filter.SensitiveFilter
             return isSensitiveClass != null;
         }
 
-        public static void EncryptProperties(object value, ICipherService cipherService)
+        public static void EncryptProperties(object value, ICipherService cipherService, string secret)
         {
             if (IsSensitiveClass(value))
             {
@@ -45,7 +45,7 @@ namespace PocSecurity.Filter.SensitiveFilter
                         foreach (var item in (IList)value)
                         {
                             var propertyValue = GetValueFromProperty(item, property);
-                            var encrypted = cipherService.Encrypt(propertyValue);
+                            var encrypted = cipherService.Encrypt(propertyValue, secret);
                             var encoded = HttpUtility.UrlEncode(encrypted);
                             property.SetValue(item, encoded);
                         }
@@ -53,7 +53,7 @@ namespace PocSecurity.Filter.SensitiveFilter
                     else
                     {
                         var propertyValue = GetValueFromProperty(value, property);
-                        var encrypted = cipherService.Encrypt(propertyValue);
+                        var encrypted = cipherService.Encrypt(propertyValue, secret);
                         var encoded = HttpUtility.UrlEncode(encrypted);
                         property.SetValue(value, encoded);
                     }
@@ -61,7 +61,7 @@ namespace PocSecurity.Filter.SensitiveFilter
             }
         }
 
-        public static void DecryptProperties(object value, ControllerParameterDescriptor parameter, ActionExecutingContext context, ICipherService cipherService)
+        public static void DecryptProperties(object value, ControllerParameterDescriptor parameter, ActionExecutingContext context, ICipherService cipherService, string secret)
         {
             if(IsSensitiveClass(value))
             {
@@ -75,7 +75,7 @@ namespace PocSecurity.Filter.SensitiveFilter
                         {
                             var propertyValue = GetValueFromProperty(item, property);
                             var decoded = HttpUtility.UrlDecode(propertyValue);
-                            var decrypted = cipherService.Decrypt(decoded);
+                            var decrypted = cipherService.Decrypt(decoded, secret);
                             property.SetValue(item, decrypted);
                         }
                     }
@@ -83,14 +83,14 @@ namespace PocSecurity.Filter.SensitiveFilter
                     {
                         var propertyValue = GetValueFromProperty(value, property);
                         var decoded = HttpUtility.UrlDecode(propertyValue);
-                        var decrypted = cipherService.Decrypt(decoded);
+                        var decrypted = cipherService.Decrypt(decoded, secret);
                         property.SetValue(value, decrypted);
                     }
                 }
             }
             else
             {
-                context.ActionArguments[parameter.Name] = HttpUtility.UrlEncode(cipherService.Decrypt((string)context.ActionArguments[parameter.Name]));
+                context.ActionArguments[parameter.Name] = HttpUtility.UrlEncode(cipherService.Decrypt((string)context.ActionArguments[parameter.Name], secret));
             }
         }
 

@@ -16,6 +16,8 @@ namespace PocSecurity.Filter
     {
         private readonly ICipherService _cipherService;
 
+        private const string SECRET = "aee6f218d6ab4cd595846fa172b360a0";
+
         public SensitiveRequestFilter(ICipherService cipherService)
         {
             _cipherService = cipherService;
@@ -38,7 +40,7 @@ namespace PocSecurity.Filter
                     var actionArguments = context.ActionArguments;
                     foreach (var arg in actionArguments.ToList())
                     {
-                        SensitiveFilterHelper.DecryptProperties(arg.Value, p, context, _cipherService);
+                        SensitiveFilterHelper.DecryptProperties(arg.Value, p, context, _cipherService, SECRET);
                     }
                 }
             }
