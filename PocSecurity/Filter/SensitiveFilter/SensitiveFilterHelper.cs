@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 
 namespace PocSecurity.Filter.SensitiveFilter
 {
@@ -44,13 +45,17 @@ namespace PocSecurity.Filter.SensitiveFilter
                         foreach (var item in (IList)value)
                         {
                             var propertyValue = GetValueFromProperty(item, property);
-                            property.SetValue(item, cipherService.Encrypt(propertyValue));
+                            var encrypted = cipherService.Encrypt(propertyValue);
+                            var encoded = HttpUtility.UrlEncode(encrypted);
+                            property.SetValue(item, encoded);
                         }
                     }
                     else
                     {
                         var propertyValue = GetValueFromProperty(value, property);
-                        property.SetValue(value, cipherService.Encrypt(propertyValue));
+                        var encrypted = cipherService.Encrypt(propertyValue);
+                        var encoded = HttpUtility.UrlEncode(encrypted);
+                        property.SetValue(value, encoded);
                     }
                 }
             }
@@ -69,19 +74,23 @@ namespace PocSecurity.Filter.SensitiveFilter
                         foreach (var item in (IList)value)
                         {
                             var propertyValue = GetValueFromProperty(item, property);
-                            property.SetValue(item, cipherService.Decrypt(propertyValue));
+                            var decoded = HttpUtility.UrlDecode(propertyValue);
+                            var decrypted = cipherService.Decrypt(decoded);
+                            property.SetValue(item, decrypted);
                         }
                     }
                     else
                     {
                         var propertyValue = GetValueFromProperty(value, property);
-                        property.SetValue(value, cipherService.Decrypt(propertyValue));
+                        var decoded = HttpUtility.UrlDecode(propertyValue);
+                        var decrypted = cipherService.Decrypt(decoded);
+                        property.SetValue(value, decrypted);
                     }
                 }
             }
             else
             {
-                context.ActionArguments[parameter.Name] = cipherService.Decrypt((string)context.ActionArguments[parameter.Name]);
+                context.ActionArguments[parameter.Name] = HttpUtility.UrlEncode(cipherService.Decrypt((string)context.ActionArguments[parameter.Name]));
             }
         }
 

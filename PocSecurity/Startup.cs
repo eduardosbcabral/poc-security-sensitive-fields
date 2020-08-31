@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +40,8 @@ namespace PocSecurity
             services.AddSingleton(mapper);
 
             services.AddDataProtection();
+                //.SetDefaultKeyLifetime(TimeSpan.FromDays(90))
+                //..PersistKeysToFileSystem(new DirectoryInfo(@"C:\"))
 
             services.AddControllers(options => 
             {
