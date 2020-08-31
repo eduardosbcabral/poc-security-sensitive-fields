@@ -1,47 +1,77 @@
-﻿using PocSecurity.Filter.SensitiveFilter;
+﻿using Newtonsoft.Json;
+using PocSecurity.Filter.SensitiveFilter;
 using PocSecurityDotNetFramework.Sensitive;
-using PocSecurityDotNetFramework.Services;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Text;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
-namespace PocSecurity.Filter
+namespace PocSecurityDotNetFramework.Filter
 {
-    public class SensitiveResultFilter : ActionFilterAttribute
+    public class SensitiveFilter : ActionFilterAttribute
     {
         private const string SECRET = "793f97ea960e45eb8ab72f91f770bcae";
 
         public override void OnActionExecuted(HttpActionExecutedContext filterContext)
         {
-            var obj = (filterContext.Response.Content as ObjectContent);
-            if (obj == null)
-                return;
-            var apiResult = obj.Value;
-            if (apiResult == null)
-                return;
+            try
+            {
+                var obj = (filterContext.Response.Content as ObjectContent);
+                if (obj == null)
+                    return;
+                var apiResult = obj.Value;
+                if (apiResult == null)
+                    return;
 
-            SensitiveFilterHelper.EncryptProperties(apiResult, SECRET);
+                SensitiveFilterHelper.EncryptProperties(apiResult, SECRET);
+            }
+            catch (Exception)
+            {
+                var objMessage = new
+                {
+                    Message = "Ocorreu um erro no atributo da resposta."
+                };
+
+                filterContext.Response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(objMessage), Encoding.UTF8, "application/json")
+                };
+            }
         }
 
         public override void OnActionExecuting(HttpActionContext context)
         {
-            var parameters = context.ActionDescriptor.GetParameters();
-
-            foreach (HttpParameterDescriptor p in parameters)
+            try
             {
-                var attributes = p.GetCustomAttributes<SensitiveParameterAttribute>();
-                if (attributes == null) return;
-                if (attributes.Count == 0) return;
+                var parameters = context.ActionDescriptor.GetParameters();
 
-                var actionArguments = context.ActionArguments;
-                foreach (var arg in actionArguments.ToList())
+                foreach (HttpParameterDescriptor p in parameters)
                 {
-                    SensitiveFilterHelper.DecryptProperties(arg.Value, p.ParameterName, context, SECRET);
+                    var attributes = p.GetCustomAttributes<SensitiveParameterAttribute>();
+                    if (attributes == null) return;
+                    if (attributes.Count == 0) return;
+
+                    var actionArguments = context.ActionArguments;
+                    foreach (var arg in actionArguments.ToList())
+                    {
+                        SensitiveFilterHelper.DecryptProperties(arg.Value, p.ParameterName, context, SECRET);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                var objMessage = new
+                {
+                    Message = "Ocorreu um erro no parametro enviado."
+                };
+
+                context.Response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(objMessage), Encoding.UTF8, "application/json")
+                };
             }
         }
     }

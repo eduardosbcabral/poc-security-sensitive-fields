@@ -33,9 +33,9 @@ namespace PocSecurity.Controllers
         }
 
         [Route("get2"), HttpPost]
-        public IHttpActionResult Get([SensitiveParameter, FromBody] List<UserQueryModel> userQueryModel)
+        public IHttpActionResult Get([SensitiveParameter, FromBody] UserQueryModel userQueryModel)
         {
-            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == int.Parse(userQueryModel[0].Id)).FirstOrDefault());
+            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == int.Parse(userQueryModel.Id)).FirstOrDefault());
             return Ok(user);
         }
 

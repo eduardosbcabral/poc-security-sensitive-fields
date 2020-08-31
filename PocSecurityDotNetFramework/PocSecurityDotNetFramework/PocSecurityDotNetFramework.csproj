@@ -130,9 +130,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Filter\SensitiveFilter\SensitiveFilter.cs" />
     <Compile Include="Filter\SensitiveFilter\SensitiveFilterHelper.cs" />
-    <Compile Include="Filter\SensitiveFilter\SensitiveRequestFilter.cs" />
-    <Compile Include="Filter\SensitiveFilter\SensitiveResultFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

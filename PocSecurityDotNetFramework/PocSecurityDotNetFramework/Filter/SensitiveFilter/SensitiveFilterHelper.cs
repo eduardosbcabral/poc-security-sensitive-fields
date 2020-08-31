@@ -90,7 +90,7 @@ namespace PocSecurity.Filter.SensitiveFilter
             }
             else
             {
-                context.ActionArguments[parameterName] = HttpUtility.UrlEncode(RijndaelCipherService.Decrypt((string)context.ActionArguments[parameterName]));
+                context.ActionArguments[parameterName] = HttpUtility.UrlEncode(RijndaelCipherService.Decrypt((string)context.ActionArguments[parameterName], secret));
             }
         }
 
