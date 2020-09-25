@@ -34,35 +34,35 @@ namespace PocSecurity.Controllers
         public IHttpActionResult Get([ModelBinder(typeof(SensitiveRijndaelParameterBinder))] Sensitive id)
         {
             var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == id).FirstOrDefault());
-            return this.OkSensitive(user, _cipherService);
+            return this.OkSensitive(user);
         }
 
         [Route("get2"), HttpPost]
         public IHttpActionResult Get([ModelBinder(typeof(SensitiveRijndaelClassBinder))] UserQueryModel userQueryModel)
         {
             var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == userQueryModel.Id).FirstOrDefault());
-            return this.OkSensitive(user, _cipherService);
+            return this.OkSensitive(user);
         }
 
         [Route("get3"), HttpPost]
         public IHttpActionResult Get([ModelBinder(typeof(SensitiveRijndaelClassBinder))] List<UserQueryModel> userQueryModel)
         {
             var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == userQueryModel[0].Id).FirstOrDefault());
-            return this.OkSensitive(user, _cipherService);
+            return this.OkSensitive(user);
         }
 
         [Route("list")]
         public IHttpActionResult Get()
         {
             var users = _mapper.Map<List<UserQueryModel>>(_users);
-            return this.OkSensitive(users, _cipherService);
+            return this.OkSensitive(users);
         }
 
         [Route("list/first")]
         public IHttpActionResult GetFirst()
         {
             var user = _mapper.Map<UserQueryModel>(_users[0]);
-            return this.OkSensitive(user, _cipherService);
+            return this.OkSensitive(user);
         }
     }
 }

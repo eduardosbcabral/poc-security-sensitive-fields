@@ -9,11 +9,12 @@ namespace PocSecurityDotNetFramework.Http
 {
     public static class ApiControllerExtensions
     {
-        public static IHttpActionResult OkSensitive<T>(this ApiController apiController, T value, ICipherService cipherService)
+        public static IHttpActionResult OkSensitive<T>(this ApiController apiController, T value)
         {
             try
             {
                 var sensitiveHelper = new SensitiveAnnotationHelper();
+                ICipherService cipherService = new RijndaelCipherService();
 
                 var isSensitiveClass = sensitiveHelper.IsSensitiveClass(value);
 
@@ -31,7 +32,6 @@ namespace PocSecurityDotNetFramework.Http
                     }
                 }
 
-                //SensitiveFilterHelper.EncryptProperties(value, SecurityConfiguration.SensitiveSecret);
                 return new ResponseMessageResult(
                     apiController.Request.CreateResponse(HttpStatusCode.OK, value)
                 );
