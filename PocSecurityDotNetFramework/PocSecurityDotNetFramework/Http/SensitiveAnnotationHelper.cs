@@ -1,9 +1,10 @@
-﻿using PocSecurityDotNetFramework.Sensitive;
+﻿using PocSecurityDotNetFramework.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace PocSecurityDotNetFramework.Http
 {
@@ -16,7 +17,7 @@ namespace PocSecurityDotNetFramework.Http
                 return false;
             }
 
-            var isSensitiveType = false;
+            bool isSensitiveType;
 
             if (IsList(obj))
             {
@@ -58,11 +59,23 @@ namespace PocSecurityDotNetFramework.Http
                 .Where(prop => prop.IsDefined(typeof(SensitiveFieldAttribute), false));
         }
 
-        public IEnumerable<PropertyInfo> GetSensitiveProperties<T>(Type type)
+        public IEnumerable<PropertyInfo> GetSensitivePropertiesByType(Type type)
         {
             return type
                 .GetProperties()
                 .Where(prop => prop.IsDefined(typeof(SensitiveFieldAttribute), false));
+        }
+
+        public string EncodeTo64(string toEncode)
+        {
+            byte[] toEncodeAsBytes = Encoding.ASCII.GetBytes(toEncode);
+            return Convert.ToBase64String(toEncodeAsBytes);
+        }
+
+        public string DecodeFrom64(string encodedData)
+        {
+            byte[] encodedDataAsBytes = Convert.FromBase64String(encodedData);
+            return Encoding.ASCII.GetString(encodedDataAsBytes);
         }
     }
 }

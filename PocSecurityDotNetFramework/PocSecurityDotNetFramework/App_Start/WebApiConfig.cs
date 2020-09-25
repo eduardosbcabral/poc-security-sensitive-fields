@@ -1,4 +1,5 @@
 ﻿using PocSecurityDotNetFramework.Http;
+using System.Configuration;
 using System.Web.Http;
 
 namespace PocSecurityDotNetFramework
@@ -12,7 +13,7 @@ namespace PocSecurityDotNetFramework
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            SecurityConfiguration.SensitiveSecret = "AAAAAAAAAAAAAAAAAAAAA";
+            config.UseCgdfSecurity(ConfigurationManager.AppSettings.Get("security_secret"));
 
             //config.Filters.Add(new SensitiveFilter());
 

@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace PocSecurityDotNetFramework.Sensitive
+namespace PocSecurityDotNetFramework.Http
 {
     [TypeConverter(typeof(Converter))]
     public struct Sensitive
@@ -32,7 +32,8 @@ namespace PocSecurityDotNetFramework.Sensitive
 
         public static implicit operator int(Sensitive type)
         {
-            return int.Parse(type.Value);
+            int.TryParse(type.Value, out int result);
+            return result;
         }
 
         public static implicit operator string(Sensitive type)
@@ -43,6 +44,14 @@ namespace PocSecurityDotNetFramework.Sensitive
         public override string ToString()
         {
             return Value;
+        }
+
+        public bool HasValue()
+        {
+            string str = this;
+            int num = this;
+
+            return !string.IsNullOrEmpty(str) || num != 0;
         }
 
         public class Converter : TypeConverter

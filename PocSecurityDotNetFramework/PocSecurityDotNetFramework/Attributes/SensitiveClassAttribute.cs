@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PocSecurityDotNetFramework.Sensitive
+namespace PocSecurityDotNetFramework.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class SensitiveClassAttribute : Attribute

@@ -135,18 +135,22 @@
     </Compile>
     <Compile Include="Http\ApiControllerExtensions.cs" />
     <Compile Include="Http\ClassCryptography.cs" />
+    <Compile Include="Http\FieldCryptography.cs" />
+    <Compile Include="Http\HttpConfigurationExtensions.cs" />
     <Compile Include="Http\IHttpCryptography.cs" />
     <Compile Include="Http\ListCryptography.cs" />
     <Compile Include="Http\SecurityConfiguration.cs" />
     <Compile Include="Http\SensitiveAnnotationHelper.cs" />
-    <Compile Include="Http\SensitiveClassBinder.cs" />
+    <Compile Include="Http\SensitiveBinderErrorFilter.cs" />
+    <Compile Include="Http\SensitiveRijndaelClassBinder.cs" />
+    <Compile Include="Http\SensitiveRijndaelParameterBinder.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserQueryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sensitive\SensitiveClassAttribute.cs" />
-    <Compile Include="Sensitive\SensitiveFieldAttribute.cs" />
-    <Compile Include="Sensitive\SensitiveParameterAttribute.cs" />
-    <Compile Include="Sensitive\Sensitive.cs" />
+    <Compile Include="Attributes\SensitiveClassAttribute.cs" />
+    <Compile Include="Attributes\SensitiveFieldAttribute.cs" />
+    <Compile Include="Attributes\SensitiveParameterAttribute.cs" />
+    <Compile Include="Http\Sensitive.cs" />
     <Compile Include="Services\ICipherService.cs" />
     <Compile Include="Services\RijndaelCipherService.cs" />
   </ItemGroup>

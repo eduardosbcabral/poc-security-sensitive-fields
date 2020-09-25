@@ -1,4 +1,5 @@
-﻿using PocSecurityDotNetFramework.Sensitive;
+﻿using PocSecurityDotNetFramework.Attributes;
+using PocSecurityDotNetFramework.Http;
 
 namespace PocSecurityDotNetFramework.Models
 {
@@ -6,7 +7,7 @@ namespace PocSecurityDotNetFramework.Models
     public class UserQueryModel
     {
         [SensitiveField]
-        public Sensitive.Sensitive Id { get; set; }
+        public Sensitive Id { get; set; }
         public string Username { get; set; }
         public string Cpf { get; set; }
     }
