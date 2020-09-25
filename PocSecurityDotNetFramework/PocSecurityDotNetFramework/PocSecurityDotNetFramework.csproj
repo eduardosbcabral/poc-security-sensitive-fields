@@ -130,17 +130,24 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Filter\SensitiveFilter\SensitiveFilter.cs" />
-    <Compile Include="Filter\SensitiveFilter\SensitiveFilterHelper.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Http\ApiControllerExtensions.cs" />
+    <Compile Include="Http\ClassCryptography.cs" />
+    <Compile Include="Http\IHttpCryptography.cs" />
+    <Compile Include="Http\ListCryptography.cs" />
+    <Compile Include="Http\SecurityConfiguration.cs" />
+    <Compile Include="Http\SensitiveAnnotationHelper.cs" />
+    <Compile Include="Http\SensitiveClassBinder.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserQueryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensitive\SensitiveClassAttribute.cs" />
     <Compile Include="Sensitive\SensitiveFieldAttribute.cs" />
     <Compile Include="Sensitive\SensitiveParameterAttribute.cs" />
+    <Compile Include="Sensitive\Sensitive.cs" />
+    <Compile Include="Services\ICipherService.cs" />
     <Compile Include="Services\RijndaelCipherService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -176,7 +183,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60991</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44392/</IISUrl>
+          <IISUrl>http://localhost:44392/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

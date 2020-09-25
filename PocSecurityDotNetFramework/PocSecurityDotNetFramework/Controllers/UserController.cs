@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using PocSecurityDotNetFramework.Http;
 using PocSecurityDotNetFramework.Models;
 using PocSecurityDotNetFramework.Sensitive;
+using PocSecurityDotNetFramework.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.ModelBinding;
 
 namespace PocSecurity.Controllers
 {
@@ -18,11 +21,14 @@ namespace PocSecurity.Controllers
         };
 
         private readonly IMapper _mapper;
+        private readonly ICipherService _cipherService;
 
         public UserController()
         {
             var config = new MapperConfiguration(cfg => cfg.CreateMap<User, UserQueryModel>());
             _mapper = config.CreateMapper();
+
+            _cipherService = new RijndaelCipherService();
         }
 
         [Route("get")]
@@ -33,24 +39,24 @@ namespace PocSecurity.Controllers
         }
 
         [Route("get2"), HttpPost]
-        public IHttpActionResult Get([SensitiveParameter, FromBody] UserQueryModel userQueryModel)
+        public IHttpActionResult Get([ModelBinder(typeof(SensitiveClassBinder))] UserQueryModel userQueryModel)
         {
-            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == int.Parse(userQueryModel.Id)).FirstOrDefault());
-            return Ok(user);
+            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == userQueryModel.Id).FirstOrDefault());
+            return this.OkSensitive(user, _cipherService);
         }
 
         [Route("list")]
         public IHttpActionResult Get()
         {
             var users = _mapper.Map<List<UserQueryModel>>(_users);
-            return Ok(users);
+            return this.OkSensitive(users, _cipherService);
         }
 
         [Route("list/first")]
         public IHttpActionResult GetFirst()
         {
             var user = _mapper.Map<UserQueryModel>(_users[0]);
-            return Ok(user);
+            return this.OkSensitive(user, _cipherService);
         }
     }
 }

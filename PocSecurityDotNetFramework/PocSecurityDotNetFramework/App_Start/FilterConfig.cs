@@ -1,6 +1,4 @@
-﻿using PocSecurity.Filter;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace PocSecurityDotNetFramework
 {

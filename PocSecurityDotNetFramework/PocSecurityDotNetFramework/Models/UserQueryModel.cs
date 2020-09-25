@@ -6,7 +6,7 @@ namespace PocSecurityDotNetFramework.Models
     public class UserQueryModel
     {
         [SensitiveField]
-        public string Id { get; set; }
+        public Sensitive.Sensitive Id { get; set; }
         public string Username { get; set; }
         public string Cpf { get; set; }
     }

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace PocSecurityDotNetFramework.Services
 {
-    public class RijndaelCipherService
+    public class RijndaelCipherService : ICipherService
     {
-        public static string Encrypt(string cipherText, string secret)
+        public string Encrypt(string cipherText, string secret)
         {
             var salt = Encoding.ASCII.GetBytes(secret.Length.ToString());
 
@@ -31,7 +31,7 @@ namespace PocSecurityDotNetFramework.Services
             return cipherText;
         }
 
-        public static string Decrypt(string input, string secret)
+        public string Decrypt(string input, string secret)
         {
             var salt = Encoding.ASCII.GetBytes(secret.Length.ToString());
 
