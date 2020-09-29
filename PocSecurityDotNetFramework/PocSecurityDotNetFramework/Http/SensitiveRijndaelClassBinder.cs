@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PocSecurityDotNetFramework.Services;
 using System;
+using System.Globalization;
 using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
 
@@ -14,8 +15,9 @@ namespace PocSecurityDotNetFramework.Http
             {
                 if(bindingContext.ModelMetadata.IsComplexType)
                 {
+                    var serializerSettings = actionContext.ControllerContext.Configuration.Formatters.JsonFormatter.SerializerSettings;
                     var bodyString = actionContext.Request.Content.ReadAsStringAsync().Result;
-                    var body = JsonConvert.DeserializeObject(bodyString, bindingContext.ModelType);
+                    var body = JsonConvert.DeserializeObject(bodyString, bindingContext.ModelType, serializerSettings);
 
                     var sensitiveHelper = new SensitiveAnnotationHelper();
                     var isSensitiveClass = sensitiveHelper.IsSensitiveClass(body);

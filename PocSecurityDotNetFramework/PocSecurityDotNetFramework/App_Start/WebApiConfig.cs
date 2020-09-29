@@ -1,5 +1,6 @@
 ﻿using PocSecurityDotNetFramework.Http;
 using System.Configuration;
+using System.Globalization;
 using System.Web.Http;
 
 namespace PocSecurityDotNetFramework
@@ -16,6 +17,7 @@ namespace PocSecurityDotNetFramework
             config.UseCgdfSecurity(ConfigurationManager.AppSettings.Get("security_secret"));
 
             //config.Filters.Add(new SensitiveFilter());
+            config.Formatters.JsonFormatter.SerializerSettings.Culture = CultureInfo.GetCultureInfo("pt-BR");
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
