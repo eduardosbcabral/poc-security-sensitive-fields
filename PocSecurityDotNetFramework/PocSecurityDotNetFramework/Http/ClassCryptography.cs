@@ -35,6 +35,10 @@ namespace PocSecurityDotNetFramework.Http
                         var decrypted = _fieldCryptography.Decrypt(propertyValue);
                         property.SetValue(model, (Sensitive)decrypted, null);
                     }
+                    else
+                    {
+                        throw new SensitiveClassNullException();
+                    }
                 }
             }
 

@@ -14,7 +14,13 @@ namespace PocSecurityDotNetFramework.Http
             {
                 var objMessage = new
                 {
-                    Message = "Ocorreu um erro no parametro enviado."
+                    Message = "Ocorreu um erro no parametro enviado.",
+                    Error = actionContext.ModelState
+                        .Where(x => x.Key == "SensitiveBinderError")
+                        .Select(x => x.Value)
+                        .SelectMany(x => x.Errors)
+                        .Select(x => x.Exception)
+                        .FirstOrDefault()
                 };
 
                 actionContext.Response = actionContext.Request.CreateResponse(

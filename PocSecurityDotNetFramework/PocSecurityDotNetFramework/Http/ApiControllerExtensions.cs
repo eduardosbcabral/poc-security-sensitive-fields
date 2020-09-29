@@ -48,11 +48,12 @@ namespace PocSecurityDotNetFramework.Http
             {
                 throw ex;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 var objMessage = new
                 {
-                    Message = "Ocorreu um erro no atributo da resposta."
+                    Message = "Ocorreu um erro no atributo da resposta.",
+                    Exception = ex
                 };
                 return new ResponseMessageResult(
                     apiController.Request.CreateResponse(HttpStatusCode.BadRequest, objMessage)

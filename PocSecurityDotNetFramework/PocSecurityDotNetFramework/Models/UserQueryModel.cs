@@ -1,5 +1,6 @@
 ﻿using PocSecurityDotNetFramework.Attributes;
 using PocSecurityDotNetFramework.Http;
+using System;
 
 namespace PocSecurityDotNetFramework.Models
 {
@@ -10,14 +11,16 @@ namespace PocSecurityDotNetFramework.Models
         public Sensitive Id { get; set; }
 
         [SensitiveField]
-        public CommandID<Sensitive> CommandId { get; set; }
+        public SensitiveCommandID CommandId { get; set; }
 
         public string Username { get; set; }
         public string Cpf { get; set; }
 
+        public DateTime Data { get; set; }
+
         public UserQueryModel()
         {
-            CommandId = new CommandID<Sensitive>();
+            CommandId = new SensitiveCommandID();
         }
     }
 }

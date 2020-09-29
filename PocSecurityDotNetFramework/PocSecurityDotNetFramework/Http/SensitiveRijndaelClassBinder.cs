@@ -48,7 +48,7 @@ namespace PocSecurityDotNetFramework.Http
             }
             catch (Exception ex)
             {
-                actionContext.ModelState.AddModelError("SensitiveBinderError", "");
+                actionContext.ModelState.AddModelError("SensitiveBinderError", ex);
                 return false;
             }
         }

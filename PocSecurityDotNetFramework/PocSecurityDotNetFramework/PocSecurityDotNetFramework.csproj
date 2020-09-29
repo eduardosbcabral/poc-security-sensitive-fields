@@ -146,6 +146,7 @@
     <Compile Include="Http\SensitiveRijndaelClassBinder.cs" />
     <Compile Include="Http\SensitiveRijndaelParameterBinder.cs" />
     <Compile Include="Models\CommandID.cs" />
+    <Compile Include="Models\SensitiveCommandID.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserQueryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
