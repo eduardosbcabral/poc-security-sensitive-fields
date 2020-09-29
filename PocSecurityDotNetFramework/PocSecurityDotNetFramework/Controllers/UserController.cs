@@ -51,6 +51,13 @@ namespace PocSecurity.Controllers
             return this.OkSensitive(user);
         }
 
+        [Route("get4"), HttpPost]
+        public IHttpActionResult Get4([ModelBinder(typeof(SensitiveRijndaelClassBinder))] UserQueryModel userQueryModel)
+        {
+            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == userQueryModel.CommandId.Id).FirstOrDefault());
+            return this.OkSensitive(user);
+        }
+
         [Route("list")]
         public IHttpActionResult Get()
         {

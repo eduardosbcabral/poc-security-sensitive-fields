@@ -22,11 +22,19 @@ namespace PocSecurityDotNetFramework.Http
 
             foreach (var property in classProperties)
             {
-                var propertyValue = (Sensitive)property.GetValue(model);
-                if (propertyValue.HasValue())
+                var isClass = property.PropertyType.IsClass;
+                if(isClass)
                 {
-                    var decrypted = _fieldCryptography.Decrypt(propertyValue);
-                    property.SetValue(model, (Sensitive)decrypted, null);
+                    Decrypt(property.GetValue(model));
+                } 
+                else
+                {
+                    var propertyValue = (Sensitive)property.GetValue(model);
+                    if (propertyValue.HasValue())
+                    {
+                        var decrypted = _fieldCryptography.Decrypt(propertyValue);
+                        property.SetValue(model, (Sensitive)decrypted, null);
+                    }
                 }
             }
 
@@ -39,11 +47,25 @@ namespace PocSecurityDotNetFramework.Http
 
             foreach (var property in classProperties)
             {
-                var propertyValue = (Sensitive)property.GetValue(model);
-                if(propertyValue.HasValue())
+                var isClass = property.PropertyType.IsClass;
+                if (isClass)
                 {
-                    var encrypted = _fieldCryptography.Encrypt(propertyValue);
-                    property.SetValue(model, encrypted, null);
+                    var propertyValue = property.GetValue(model);
+                    if(propertyValue == null)
+                    {
+                        throw new SensitiveClassNullException($"A propriedade {property.Name} está nula, então não é possível definir um valor sensitivo para ela.");
+                    }
+
+                    Encrypt(property.GetValue(model));
+                }
+                else
+                {
+                    var propertyValue = (Sensitive)property.GetValue(model);
+                    if(propertyValue.HasValue())
+                    {
+                        var encrypted = _fieldCryptography.Encrypt(propertyValue);
+                        property.SetValue(model, encrypted, null);
+                    }
                 }
             }
 

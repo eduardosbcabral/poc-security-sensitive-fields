@@ -8,7 +8,16 @@ namespace PocSecurityDotNetFramework.Models
     {
         [SensitiveField]
         public Sensitive Id { get; set; }
+
+        [SensitiveField]
+        public CommandID<Sensitive> CommandId { get; set; }
+
         public string Username { get; set; }
         public string Cpf { get; set; }
+
+        public UserQueryModel()
+        {
+            CommandId = new CommandID<Sensitive>();
+        }
     }
 }

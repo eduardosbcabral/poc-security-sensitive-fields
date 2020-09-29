@@ -142,8 +142,10 @@
     <Compile Include="Http\SecurityConfiguration.cs" />
     <Compile Include="Http\SensitiveAnnotationHelper.cs" />
     <Compile Include="Http\SensitiveBinderErrorFilter.cs" />
+    <Compile Include="Http\SensitiveClassNullException.cs" />
     <Compile Include="Http\SensitiveRijndaelClassBinder.cs" />
     <Compile Include="Http\SensitiveRijndaelParameterBinder.cs" />
+    <Compile Include="Models\CommandID.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserQueryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

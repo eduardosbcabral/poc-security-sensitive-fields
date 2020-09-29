@@ -44,6 +44,10 @@ namespace PocSecurityDotNetFramework.Http
             {
                 throw ex;
             }
+            catch(SensitiveClassNullException ex)
+            {
+                throw ex;
+            }
             catch (Exception)
             {
                 var objMessage = new
