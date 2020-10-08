@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using PocSecurity.Models;
-using PocSecurity.Sensitive;
-using PocSecurity.Services;
+using PocSecurityDotNetCore.Attributes;
+using PocSecurityDotNetCore.Http;
+using PocSecurityDotNetCore.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PocSecurity.Controllers
+namespace PocSecurityDotNetCore.Controllers
 {
     [Route("user")]
     public class UserController : ControllerBase
@@ -26,31 +26,45 @@ namespace PocSecurity.Controllers
         }
 
         [Route("get")]
-        public IActionResult Get([SensitiveParameter] string id)
+        public IActionResult Get([ModelBinder(typeof(SensitiveRijndaelParameterBinder))] Sensitive id)
         {
-            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == int.Parse(id)).FirstOrDefault());
-            return Ok(user);
+            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == id).FirstOrDefault());
+            return this.OkSensitive(user);
         }
 
         [Route("get2"), HttpPost]
-        public IActionResult Get([SensitiveParameter, FromBody] List<UserQueryModel> userQueryModel)
+        public IActionResult Get([ModelBinder(typeof(SensitiveRijndaelClassBinder))] UserQueryModel userQueryModel)
         {
-            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == int.Parse(userQueryModel[0].Id)).FirstOrDefault());
-            return Ok(user);
+            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == userQueryModel.Id).FirstOrDefault());
+            return this.OkSensitive(user);
+        }
+
+        [Route("get3"), HttpPost]
+        public IActionResult Get([ModelBinder(typeof(SensitiveRijndaelClassBinder))] List<UserQueryModel> userQueryModel)
+        {
+            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == userQueryModel[0].Id).FirstOrDefault());
+            return this.OkSensitive(user);
+        }
+
+        [Route("get4"), HttpPost]
+        public IActionResult Get4([ModelBinder(typeof(SensitiveRijndaelClassBinder))] UserQueryModel userQueryModel)
+        {
+            var user = _mapper.Map<UserQueryModel>(_users.Where(x => x.Id == userQueryModel.CommandId.Id).FirstOrDefault());
+            return this.OkSensitive(user);
         }
 
         [Route("list")]
         public IActionResult Get()
         {
             var users = _mapper.Map<List<UserQueryModel>>(_users);
-            return Ok(users);
+            return this.OkSensitive(users);
         }
 
         [Route("list/first")]
         public IActionResult GetFirst()
         {
             var user = _mapper.Map<UserQueryModel>(_users[0]);
-            return Ok(user);
+            return this.OkSensitive(user);
         }
     }
 }

@@ -3,15 +3,10 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace PocSecurity.Services
+namespace PocSecurityDotNetCore.Services
 {
     public class RijndaelCipherService : ICipherService
     {
-        public RijndaelCipherService()
-        {
-
-        }
-
         public string Encrypt(string cipherText, string secret)
         {
             var salt = Encoding.ASCII.GetBytes(secret.Length.ToString());

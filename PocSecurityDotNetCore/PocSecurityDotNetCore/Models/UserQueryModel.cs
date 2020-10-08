@@ -1,18 +1,26 @@
-﻿using PocSecurity.Sensitive;
+﻿using PocSecurityDotNetCore.Attributes;
+using PocSecurityDotNetCore.Http;
+using System;
 
-namespace PocSecurity.Models
+namespace PocSecurityDotNetCore.Models
 {
     [SensitiveClass]
     public class UserQueryModel
     {
         [SensitiveField]
-        public string Id { get; set; }
+        public Sensitive Id { get; set; }
+
+        [SensitiveField]
+        public SensitiveCommandID CommandId { get; set; }
+
         public string Username { get; set; }
         public string Cpf { get; set; }
 
-        public int Crypto(int id)
+        public DateTime Data { get; set; }
+
+        public UserQueryModel()
         {
-            return id + 5000;
+            CommandId = new SensitiveCommandID();
         }
     }
 }

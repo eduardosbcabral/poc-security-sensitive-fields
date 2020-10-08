@@ -1,4 +1,4 @@
-﻿namespace PocSecurity.Models
+﻿namespace PocSecurityDotNetCore.Models
 {
     public class User
     {

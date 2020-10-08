@@ -1,8 +1,8 @@
-﻿namespace PocSecurity.Services
+﻿namespace PocSecurityDotNetCore.Services
 {
     public interface ICipherService
     {
-        string Encrypt(string input, string secret = "");
-        string Decrypt(string cipherText, string secret = "");
+        string Encrypt(string text, string secret);
+        string Decrypt(string text, string secret);
     }
 }

@@ -4,7 +4,7 @@
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:57649",
-      "sslPort": 44336
+      "sslPort": 0
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PocSecurity": {
+    "PocSecurityDotNetCore": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",

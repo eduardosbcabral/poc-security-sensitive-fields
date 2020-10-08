@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
+﻿using System;
 
-namespace PocSecurity.Sensitive
+namespace PocSecurityDotNetCore.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter)]
     public class SensitiveParameterAttribute : Attribute
