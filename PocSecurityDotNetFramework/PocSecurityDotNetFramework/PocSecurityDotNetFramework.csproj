@@ -138,6 +138,7 @@
     <Compile Include="Http\FieldCryptography.cs" />
     <Compile Include="Http\HttpConfigurationExtensions.cs" />
     <Compile Include="Http\IHttpCryptography.cs" />
+    <Compile Include="Http\JsonCryptoConverter.cs" />
     <Compile Include="Http\ListCryptography.cs" />
     <Compile Include="Http\SecurityConfiguration.cs" />
     <Compile Include="Http\SensitiveAnnotationHelper.cs" />
